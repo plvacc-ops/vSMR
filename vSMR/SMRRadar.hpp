@@ -74,15 +74,15 @@ public:
 		map<int, POINT2> History_three_points;
 	};
 
-	map<const char *, Patatoide_Points> Patatoides;
+	map<const char*, Patatoide_Points> Patatoides;
 
 	map<string, bool> ClosedRunway;
 
 	char DllPathFile[_MAX_PATH];
 	string DllPath;
 	string ConfigPath;
-	CCallsignLookup * Callsigns = nullptr;
-	CColorManager * ColorManager;
+	CCallsignLookup* Callsigns = nullptr;
+	CColorManager* ColorManager;
 
 	map<string, bool> ShowLists;
 	map<string, RECT> ListAreas;
@@ -115,10 +115,10 @@ public:
 
 	map<string, clock_t> RecentlyAutoMovedTags;
 
-	CRimcas * RimcasInstance = nullptr;
-	CConfig * CurrentConfig = nullptr;
+	CRimcas* RimcasInstance = nullptr;
+	CConfig* CurrentConfig = nullptr;
 
-	map<int, Gdiplus::Font *> customFonts;
+	map<int, Gdiplus::Font*> customFonts;
 	int currentFontSize = 1;
 
 	map<string, CPosition> AirportPositions;
@@ -162,49 +162,14 @@ public:
 
 	inline virtual bool IsCorrelated(CFlightPlan fp, CRadarTarget rt)
 	{
-
-		if (CurrentConfig->getActiveProfile()["filters"]["pro_mode"]["enable"].GetBool())
+		if (CurrentConfig->getActiveProfile()["filters"]["pro_mode"].GetBool())
 		{
-			if (fp.IsValid())
-			{
-				bool isCorr = false;
-				if (strcmp(fp.GetControllerAssignedData().GetSquawk(), rt.GetPosition().GetSquawk()) == 0)
-				{
-					isCorr = true;
-				}
-
-				if (CurrentConfig->getActiveProfile()["filters"]["pro_mode"]["accept_pilot_squawk"].GetBool())
-				{
-					isCorr = true;
-				}
-
-				if (isCorr)
-				{
-					const Value& sqs = CurrentConfig->getActiveProfile()["filters"]["pro_mode"]["do_not_autocorrelate_squawks"];
-					for (SizeType i = 0; i < sqs.Size(); i++) {
-						if (strcmp(rt.GetPosition().GetSquawk(), sqs[i].GetString()) == 0)
-						{
-							isCorr = false;
-							break;
-						}
-					}
-				}
-
-				if (std::find(ManuallyCorrelated.begin(), ManuallyCorrelated.end(), rt.GetSystemID()) != ManuallyCorrelated.end())
-				{
-					isCorr = true;
-				}
-
-				if (std::find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()) != ReleasedTracks.end())
-				{
-					isCorr = false;
-				}
-
-				return isCorr;
-			}
-
-			return false;
-		} else
+			if (!fp.IsValid()) return false;
+			if (!rt.GetPosition().GetTransponderC()) return false;
+			
+			return true;
+		}
+		else
 		{
 			// If the pro mode is not used, then the AC is always correlated
 			return true;
@@ -237,19 +202,19 @@ public:
 
 	//---OnClickScreenObject-----------------------------------------
 
-	virtual void OnClickScreenObject(int ObjectType, const char * sObjectId, POINT Pt, RECT Area, int Button);
+	virtual void OnClickScreenObject(int ObjectType, const char* sObjectId, POINT Pt, RECT Area, int Button);
 
 	//---OnMoveScreenObject---------------------------------------------
 
-	virtual void OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT Pt, RECT Area, bool Released);
+	virtual void OnMoveScreenObject(int ObjectType, const char* sObjectId, POINT Pt, RECT Area, bool Released);
 
 	//---OnOverScreenObject---------------------------------------------
 
-	virtual void OnOverScreenObject(int ObjectType, const char * sObjectId, POINT Pt, RECT Area);
+	virtual void OnOverScreenObject(int ObjectType, const char* sObjectId, POINT Pt, RECT Area);
 
 	//---OnCompileCommand-----------------------------------------
 
-	virtual bool OnCompileCommand(const char * sCommandLine);
+	virtual bool OnCompileCommand(const char* sCommandLine);
 
 	//---RefreshAirportActivity---------------------------------------------
 
@@ -295,7 +260,7 @@ public:
 
 		CPosition newPos;
 
-		double d = (distance*0.00053996) / 60 * PI / 180;
+		double d = (distance * 0.00053996) / 60 * PI / 180;
 		double trk = DegToRad(heading);
 		double lat0 = DegToRad(origin.m_Latitude);
 		double lon0 = DegToRad(origin.m_Longitude);
@@ -315,7 +280,7 @@ public:
 
 	//---GetBottomLine---------------------------------------------
 
-	virtual string GetBottomLine(const char * Callsign);
+	virtual string GetBottomLine(const char* Callsign);
 
 	//---LineIntersect---------------------------------------------
 
@@ -346,7 +311,7 @@ public:
 
 	//---OnFunctionCall-------------------------------------------------
 
-	virtual void OnFunctionCall(int FunctionId, const char * sItemString, POINT Pt, RECT Area);
+	virtual void OnFunctionCall(int FunctionId, const char* sItemString, POINT Pt, RECT Area);
 
 	//---OnAsrContentToBeClosed-----------------------------------------
 

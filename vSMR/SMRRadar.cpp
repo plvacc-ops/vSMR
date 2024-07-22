@@ -2096,7 +2096,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			ColorTagType = TagTypes::Uncorrelated;
 		}
 
-		map<string, string> TagReplacingMap = GenerateTagData(rt, fp, IsCorrelated(fp, rt), CurrentConfig->getActiveProfile()["filters"]["pro_mode"]["enable"].GetBool(), GetPlugIn()->GetTransitionAltitude(), CurrentConfig->getActiveProfile()["labels"]["use_aspeed_for_gate"].GetBool(), getActiveAirport());
+		map<string, string> TagReplacingMap = GenerateTagData(rt, fp, IsCorrelated(fp, rt), CurrentConfig->getActiveProfile()["filters"]["pro_mode"].GetBool(), GetPlugIn()->GetTransitionAltitude(), CurrentConfig->getActiveProfile()["labels"]["use_aspeed_for_gate"].GetBool(), getActiveAirport());
 
 		// ----- Generating the clickable map -----
 		map<string, int> TagClickableMap;
